@@ -3,7 +3,7 @@
 namespace App\Actions\Games\GameLobbies;
 
 use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
-use App\Events\ChatRoom\UserLeftGameLobbyEvent;
+use App\Events\GameLobby\UserLeftGameLobbyEvent;
 use App\Models\ChatRoomUser;
 use App\Models\GameLobby;
 use App\Models\WodoAssetAccount;

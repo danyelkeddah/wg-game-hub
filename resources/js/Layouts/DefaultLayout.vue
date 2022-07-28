@@ -17,6 +17,7 @@ import {
     TransitionRoot,
 } from '@headlessui/vue';
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 const navigation = [
     { name: 'Dashboard', href: '/dashboard', current: true, external: false },
@@ -25,10 +26,10 @@ const userNavigation = [
     { name: 'Your Profile', href: '/profile', external: false },
     { name: 'Sign out', href: '#' },
 ];
+let currentUser = useCurrentUser();
 
 let props = defineProps({
     config: Object,
-    user: Object,
 });
 </script>
 <template>
@@ -64,17 +65,17 @@ let props = defineProps({
                 <div class="hidden flex-row items-center space-x-8 lg:flex">
                     <!--                    <SearchIcon class="h-6 w-6 cursor-pointer" />-->
                     <!--                    <BellIcon class="h-6 w-6 cursor-pointer" />-->
-                    <Link v-if="user" href="/profile">
+                    <Link v-if="currentUser" href="/profile">
                         <ButtonShape type="purple">
                             <span class="flex flex-row space-x-2.5">
                                 <AccountIcon class="h-6 w-6" />
                                 <span class="font-bold uppercase">{{
-                                    user.name
+                                    currentUser.name
                                 }}</span>
                             </span>
                         </ButtonShape>
                     </Link>
-                    <Link v-if="!user" href="/login">
+                    <Link v-if="!currentUser" href="/login">
                         <ButtonShape type="purple">
                             <span class="flex flex-row space-x-2.5">
                                 <span class="font-bold uppercase"
@@ -192,14 +193,19 @@ let props = defineProps({
                                                 >
                                             </div>
                                         </div>
-                                        <div v-if="user" class="pt-4 pb-2">
+                                        <div
+                                            v-if="currentUser"
+                                            class="pt-4 pb-2"
+                                        >
                                             <div class="flex items-center px-5">
                                                 <div
                                                     class="aspect-square flex-shrink-0"
                                                 >
                                                     <img
                                                         class="h-10 w-10 rounded-full"
-                                                        :src="user.image"
+                                                        :src="
+                                                            currentUser.image_url
+                                                        "
                                                         alt=""
                                                     />
                                                 </div>
@@ -209,12 +215,14 @@ let props = defineProps({
                                                     <div
                                                         class="truncate text-base font-medium text-gray-800"
                                                     >
-                                                        {{ user.full_name }}
+                                                        {{
+                                                            currentUser.full_name
+                                                        }}
                                                     </div>
                                                     <div
                                                         class="truncate text-sm font-medium text-gray-500"
                                                     >
-                                                        {{ user.email }}
+                                                        {{ currentUser.email }}
                                                     </div>
                                                 </div>
                                                 <button

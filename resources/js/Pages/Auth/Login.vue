@@ -1,18 +1,31 @@
 <script setup>
 import Logo from '@/Shared/SVG/Logo';
 import TextInput from '@/Shared/Inputs/TextInput';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
 
 let isRegister = ref(false);
 
-defineProps({
+let props = defineProps({
     login_art: {
         type: String,
         required: true,
     },
+    is_login: {
+        type: Boolean,
+        required: false,
+        default: true,
+    },
+});
+
+onMounted(() => {
+    if (props.is_login) {
+        switchToLogin();
+    } else {
+        switchToRegister();
+    }
 });
 let loginForm = useForm({
     email: '',

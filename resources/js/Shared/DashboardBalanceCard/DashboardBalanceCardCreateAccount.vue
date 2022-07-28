@@ -3,6 +3,7 @@ import ExclamationCircleIcon from '@/Shared/SVG/ExclamationCircleIcon';
 import ButtonShape from '@/Shared/ButtonShape';
 import BananoLogo from '@/Shared/SVG/BananoLogo';
 import BorderedContainer from '@/Shared/BorderedContainer';
+import { Link } from '@inertiajs/inertia-vue3';
 </script>
 <template>
     <BorderedContainer
@@ -18,9 +19,11 @@ import BorderedContainer from '@/Shared/BorderedContainer';
             In order to create a Banano wallet you need to create an account.
         </p>
         <button>
-            <ButtonShape type="gray" class="mb-5 font-bold"
-                ><span>Create an Account</span></ButtonShape
-            >
+            <Link href="/register">
+                <ButtonShape type="gray" class="mb-5 font-bold"
+                    ><span>Create an Account</span></ButtonShape
+                >
+            </Link>
         </button>
         <div class="flex flex-row space-x-4">
             <p class="font-inter text-xs font-normal uppercase text-[#909399]">

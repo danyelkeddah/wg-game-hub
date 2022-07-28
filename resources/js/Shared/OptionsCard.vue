@@ -11,7 +11,7 @@ let props = defineProps({
     >
         <div class="w-full justify-center">
             <img
-                :src="game_option_info.image"
+                :src="game_option_info.image_url"
                 class="w-full md:max-h-[10.25rem]"
             />
         </div>

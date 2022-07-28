@@ -2,60 +2,54 @@
 import BorderedContainer from '@/Shared/BorderedContainer';
 import KiteArrow from '@/Shared/SVG/KiteArrow';
 import ChatMessage from '@/Shared/Chat/ChatMessage';
-import {
-    onBeforeUnmount,
-    onMounted,
-    defineProps,
-    reactive,
-    ref,
-    computed,
-} from 'vue';
+import { onBeforeUnmount, onMounted, defineProps, reactive, ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
+import LeaderBoardModal from '@/Shared/Modals/LeaderBoardModal';
 import dayjs from 'dayjs';
 import LogoRed from '@/Shared/SVG/LogoRed';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
+import GameLobby from '@/Models/GameLobby';
 
 let props = defineProps({
-    user: Object,
-    lobby: Object,
+    gameLobby: Object,
     config: Object,
 });
 
-console.log(props.lobby);
-
-let data = reactive({
-    timeToStart: '',
-    users: props.lobby.users,
-});
-
-let usersInLobby = computed(() => {
-    return data.users.length;
-});
+let currentUser = useCurrentUser();
+let gameLobby = reactive(new GameLobby(props.gameLobby.data));
 
 let chatMessages = reactive([]);
 let chatMessageInput = ref('');
-let players = reactive([]);
 let relativeTime = require('dayjs/plugin/relativeTime');
 let duration = require('dayjs/plugin/duration');
 
 onMounted(() => {
     dayjs.extend(relativeTime);
     dayjs.extend(duration);
-    if (props.user) {
+    gameLobby.startCountDownTimer();
+    if (currentUser) {
         window.echo
-            .join(`chat-rooms.${props.lobby.id}`)
+            .join(`game-lobby.${gameLobby.id}`)
             .error(channelError)
-            .listen('.chat.message', channelNewChatMessage)
-            .listen('.user.joined', channelUserJoined)
-            .listen('.user.left', channelUserLeft);
-
-        countDownTimer();
+            .listen(GameLobby.socketEvents.chatMessage, channelNewChatMessage)
+            .listen(GameLobby.socketEvents.userJoined, channelUserJoined)
+            .listen(GameLobby.socketEvents.userLeft, channelUserLeft)
+            .listen(
+                GameLobby.socketEvents.status.processingResults,
+                channelProcessingResults
+            )
+            .listen(
+                GameLobby.socketEvents.status.resultsProcessed,
+                channelResultsProccessed
+            );
     }
 });
 
 onBeforeUnmount(() => {
-    if (props.user) {
-        window.echo.leave(`chat-rooms.${props.lobby.id}`);
+    gameLobby.killCountDownTimer();
+    if (currentUser) {
+        window.echo.leave(`game-lobby.${gameLobby.id}`);
     }
 });
 
@@ -68,7 +62,7 @@ function sendChatMessage() {
         return;
     }
     Inertia.post(
-        `/chat-rooms/${props.lobby.id}/message`,
+        `/chat-rooms/${gameLobby.id}/message`,
         {
             message: chatMessageInput.value,
         },
@@ -83,32 +77,18 @@ function channelNewChatMessage(message) {
     chatMessages.push(message);
 }
 
-function countDownTimer() {
-    if (props.lobby.sceduled_at_w3c_string === null) {
-        return;
-    }
-
-    setInterval(function () {
-        let now = dayjs();
-        let scheduledAt = dayjs(props.lobby.scheduled_at_utc_string);
-        let diff = dayjs.duration(scheduledAt.diff(now));
-        // let formatted = diff.format('HH:mm:ss');
-        let days = `${diff.get('days')}d`;
-        let hours = `${diff.get('hours')}h`;
-        let minutes = `${diff.get('minutes')}m`;
-        let seconds = `${diff.get('seconds')}s`;
-        data.timeToStart = `${days} ${hours} ${minutes} ${seconds}`;
-    }, 1000);
-}
-
 function channelUserJoined(payload) {
-    data.users.push(payload.user);
+    gameLobby.addUser(payload.user);
 }
 
 function channelUserLeft(payload) {
-    _.remove(data.users, function (user) {
-        return user.id === payload.user.id;
-    });
+    gameLobby.removeUser(payload.user);
+}
+
+function channelProcessingResults(payload) {}
+
+function channelResultsProccessed(payload) {
+    gameLobby.resultsAreProccessed();
 }
 </script>
 <script>
@@ -120,6 +100,10 @@ export default {
 };
 </script>
 <template>
+    <LeaderBoardModal
+        :is-open="gameLobby.areResultsProcessed"
+        :game-lobby="gameLobby"
+    />
     <div
         class="mx-auto grid w-full max-w-7xl gap-y-6 p-2 pt-12 pb-24 lg:grid-cols-12 lg:gap-x-6"
     >
@@ -128,7 +112,7 @@ export default {
                 method="delete"
                 as="button"
                 type="button"
-                :href="`/game-lobbies/${lobby.id}/leave`"
+                :href="`/game-lobbies/${gameLobby.id}/leave`"
                 replace
             >
                 <div
@@ -163,7 +147,7 @@ export default {
                     <p
                         class="font-grota text-sm font-normal uppercase text-wgh-gray-6"
                     >
-                        {{ props.lobby.game.name }}
+                        {{ gameLobby.game.name }}
                     </p>
                     <p
                         class="font-grota text-sm font-semibold uppercase text-wgh-gray-6"
@@ -183,16 +167,16 @@ export default {
                         WAITING TIME
                     </p>
                     <p
-                        v-if="!data.timeToStart"
+                        v-if="!gameLobby.timeToStartAsString"
                         class="mt-2 text-center font-grota text-3xl font-extrabold text-wgh-red-2"
                     >
                         Loading...
                     </p>
                     <p
-                        v-if="data.timeToStart"
+                        v-if="gameLobby.timeToStartAsString"
                         class="mt-2 text-center font-grota text-3xl font-extrabold text-wgh-red-2"
                     >
-                        {{ data.timeToStart }}
+                        {{ gameLobby.timeToStartAsString }}
                     </p>
                 </div>
             </BorderedContainer>
@@ -215,8 +199,8 @@ export default {
                     >
                         <ChatMessage
                             v-for="chatMessage in chatMessages"
-                            :from-me="chatMessage.sender.id === props.user.id"
-                            :user-image-url="chatMessage.sender.image"
+                            :from-me="chatMessage.sender.id === currentUser.id"
+                            :user-image-url="chatMessage.sender.image_url"
                             :time="chatMessage.created_at_human_readable"
                             :username="chatMessage.sender.username"
                             :message="chatMessage.message.message"
@@ -249,7 +233,8 @@ export default {
             <p
                 class="mb-2 font-grota text-lg font-extrabold uppercase text-white"
             >
-                Players ({{ usersInLobby }} / {{ lobby.max_players }})
+                Players ({{ gameLobby.users.length }} /
+                {{ gameLobby.max_players }})
             </p>
             <div class="relative h-full w-full w-full">
                 <BorderedContainer
@@ -261,12 +246,12 @@ export default {
                     >
                         <div
                             class="flex flex-row justify-between py-2"
-                            v-for="user in data.users"
+                            v-for="user in gameLobby.users"
                         >
                             <div class="flex flex-row items-center space-x-4">
                                 <img
                                     class="h-8 w-8 rounded-full"
-                                    :src="user.image"
+                                    :src="user.image_url"
                                 />
                                 <p
                                     class="font-grota text-sm font-bold uppercase text-wgh-gray-6"

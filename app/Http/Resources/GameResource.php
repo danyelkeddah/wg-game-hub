@@ -20,8 +20,7 @@ class GameResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,
             'image' => $this->image,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'image_url' => $this->image_url,
             'game_lobbies' => GameLobbyResource::collection(
                 $this->whenLoaded('gameLobbies'),
             ),

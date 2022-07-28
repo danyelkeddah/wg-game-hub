@@ -22,7 +22,7 @@ defineEmits(['actionButtonClicked']);
             class="flex w-full flex-col space-y-4 md:w-2/3 md:flex-row md:space-y-0 md:space-x-4"
         >
             <img
-                :src="game.image"
+                :src="game.image_url"
                 :alt="`${game.name} art`"
                 class="aspect-[16/9] rounded-lg md:mb-0 md:max-h-[6.25rem]"
             />

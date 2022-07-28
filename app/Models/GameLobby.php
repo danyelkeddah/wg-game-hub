@@ -21,9 +21,11 @@ class GameLobby extends Model
     use HasFactory;
     use HasUUID;
 
+    protected $guarded = [];
+
     protected $casts = [
         'type' => GameLobbyType::class,
-        'state' => GameLobbyStatus::class,
+        'status' => GameLobbyStatus::class,
     ];
 
     protected $dates = ['scheduled_at'];
@@ -32,7 +34,17 @@ class GameLobby extends Model
         'has_available_spots',
         'players_in_lobby_count',
         'scheduled_at_utc_string',
+        'image_url',
     ];
+
+    public function imageUrl(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                return "https://picsum.photos/seed/{$this->id}/1280/720";
+            },
+        );
+    }
 
     public function newEloquentBuilder($query): GameLobbyBuilder
     {
@@ -92,5 +104,15 @@ class GameLobby extends Model
         return $this->users()
             ->where('id', $user)
             ->exists();
+    }
+
+    public function scores(): HasMany
+    {
+        return $this->hasMany(UserScore::class);
+    }
+
+    public function gameMatchAchievements(): HasMany
+    {
+        return $this->hasMany(UserAchievement::class);
     }
 }

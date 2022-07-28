@@ -32,7 +32,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'image_url'];
 
     public function gameLobbies(): BelongsToMany
     {
@@ -67,12 +67,25 @@ class User extends Authenticatable
         return $this->hasMany(UserAssetAccount::class);
     }
 
-    public function image(): Attribute
+    public function imageUrl(): Attribute
     {
         return new Attribute(
             get: function () {
                 return 'https://joeschmoe.io/api/v1/' . $this->username;
             },
         );
+    }
+
+    public function gameMatchScores(): HasMany
+    {
+        return $this->hasMany(UserScore::class);
+    }
+
+    public function achievements(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Achievement::class,
+            'user_achievements',
+        )->withPivot('game_id', 'game_lobby_id', 'additional_info');
     }
 }

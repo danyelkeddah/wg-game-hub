@@ -11,24 +11,42 @@ import { reactive, ref } from 'vue';
 import { isEmpty } from 'lodash';
 import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
+import Game from '@/Models/Game';
+
+let currentUser = useCurrentUser();
 
 let props = defineProps({
     game: Object,
-    game_options: Object,
-    user: Object,
+    gameLobbies: Object,
 });
+
+let game = reactive(new Game(props.game.data));
 
 let settings = reactive({
     startGameConfirmationModalIsOpen: false,
     selectedGameOption: {},
+    isThereActiveLobbySession: () => {
+        return !!currentUser?.current_lobby_session;
+    },
+    getActiveGameLobbySession: () => {
+        return settings.isThereActiveLobbySession()
+            ? currentUser.current_lobby_session
+            : null;
+    },
 });
-// let startGameConfirmationModalIsOpen = ref(false);
-// let selectedGameOption = reactive({});
 
 // Open Modal and set the selected game option
 function startGameButtonClicked(gameOption) {
-    if (!props.user) {
+    if (!currentUser) {
         Inertia.visit('/login');
+        return;
+    }
+    if (
+        settings.isThereActiveLobbySession() &&
+        gameOption.id === settings.getActiveGameLobbySession().id
+    ) {
+        Inertia.visit(`/game-lobbies/${gameOption.id}`);
         return;
     }
     settings.selectedGameOption = gameOption;
@@ -59,9 +77,7 @@ function modalCancelGameButtonClicked() {
     <TentModal :open="settings.startGameConfirmationModalIsOpen">
         <template v-slot:header><p>Ready to Play!</p></template>
         <template v-slot:title>
-            <p>
-                {{ props.game.name }} - {{ settings.selectedGameOption.name }}
-            </p>
+            <p>{{ game.name }} - {{ settings.selectedGameOption.name }}</p>
         </template>
         <template v-slot:subtitle>
             <p class="wgh-gray-6 font-inter text-base font-normal">
@@ -120,7 +136,7 @@ function modalCancelGameButtonClicked() {
                         <span
                             class="font-grota text-sm font-normal uppercase text-white"
                             >{{
-                                game_options.total.toLocaleString('en')
+                                gameLobbies.meta.total.toLocaleString('en')
                             }}
                             Options</span
                         >
@@ -149,36 +165,52 @@ function modalCancelGameButtonClicked() {
             class="flex grid grid-cols-1 flex-row flex-wrap gap-6 md:grid-cols-2 lg:grid-cols-3 lg:px-12"
         >
             <borderedContainer
-                v-for="option in game_options.data"
-                :key="option.id"
+                v-for="gameLobby in gameLobbies.data"
+                :key="gameLobby.id"
                 class="max-w-3xl bg-white p-6"
-                :style="{ 'border-color': `${option.theme_color}` }"
+                :style="{ 'border-color': `${gameLobby.theme_color}` }"
             >
                 <div class="aspect-w-16 aspect-h-9 mb-4">
                     <img
-                        :src="option.image"
-                        :alt="`${game.name} - ${option.name} Art`"
+                        class="rounded-lg"
+                        :src="gameLobby.image_url"
+                        :alt="`${game.name} - ${gameLobby.name} Art`"
                     />
                 </div>
                 <div class="mb-4 flex flex-row justify-between">
                     <h2
                         class="font-grota text-xl font-extrabold uppercase text-wgh-gray-6"
                     >
-                        {{ option.name }}
+                        {{ gameLobby.name }}
                     </h2>
                     <div class="text-bold font-grota text-base text-wgh-gray-6">
                         <span
-                            >{{ option.base_entrance_fee }}
-                            {{ option.asset.symbol }}</span
+                            >{{ gameLobby.base_entrance_fee }}
+                            {{ gameLobby.asset.symbol }}</span
                         >
                     </div>
                 </div>
                 <button
-                    class="mb-6 w-full uppercase"
-                    @click.prevent="startGameButtonClicked(option)"
+                    class="mb-6 w-full uppercase disabled:cursor-not-allowed"
+                    @click.prevent="startGameButtonClicked(gameLobby)"
+                    :disabled="
+                        settings.isThereActiveLobbySession() &&
+                        gameLobby.id !== settings.getActiveGameLobbySession().id
+                    "
                 >
                     <ButtonShape type="red">
-                        <span class="w-full">Start Playing</span>
+                        <div class="w-full content-center">
+                            <span
+                                class="w-full"
+                                v-if="
+                                    settings.isThereActiveLobbySession() &&
+                                    gameLobby.id ===
+                                        settings.getActiveGameLobbySession().id
+                                "
+                                >Rejoin Lobby</span
+                            >
+                            <span v-else class="w-full">Start Playing</span>
+                        </div>
                     </ButtonShape>
                 </button>
 
@@ -191,7 +223,7 @@ function modalCancelGameButtonClicked() {
                     <div
                         class="list-inside list-disc font-inter text-sm font-normal text-wgh-gray-4"
                     >
-                        {{ option?.rules }}
+                        {{ gameLobby?.rules }}
                     </div>
                 </div>
             </borderedContainer>

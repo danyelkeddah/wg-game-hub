@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\GameStatus;
 use App\Http\Resources\GameResource;
 use App\Models\Game;
 use Inertia\Inertia;
@@ -10,38 +11,13 @@ class DashboardController extends Controller
 {
     public function __invoke()
     {
-        $games = Game::online()
-            ->forDashboard()
+        $games = Game::where('status', GameStatus::Online)
+            ->select(['id', 'name', 'description', 'image'])
             ->withCount('gameLobbies')
             ->paginate();
-        $balance = [
-            [
-                'id' => 1,
-                'name' => 'BANANO',
-                'image' => '',
-                'balance' => 3275,
-                'address' => '1PQi1jwKr4cnfFYKgeHAAAdf1PQi1jwKr4cnfFYKgeHAAAd',
-            ],
-            [
-                'id' => 2,
-                'name' => 'BTC',
-                'image' => '',
-                'balance' => 3,
-                'address' => 'cnfFYKgeHAAAdf1PQi1jwK1PQi1jwKr4r4cnfFYKgeHAAAd',
-            ],
-            [
-                'id' => 3,
-                'name' => 'NANO',
-                'image' => '',
-                'balance' => 30000,
-                'address' => 'wKr4cnfFYKgeHAAAd1PQi1jwKr4cnfFYKgeHAAAdf1PQi1j',
-            ],
-        ];
 
         return Inertia::render('Dashboard', [
-            'dashboard_art' => asset('images/dashboard-art.png'),
             'games' => GameResource::collection($games),
-            'balance' => $balance,
         ]);
     }
 }

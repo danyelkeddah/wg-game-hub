@@ -39,6 +39,7 @@ class HandleInertiaRequests extends Middleware
             'full_name' => $request->user()->full_name,
             'email' => $request->user()->email,
             'image' => $request->user()->image,
+            'image_url' => $request->user()->image_url,
             'asset_accounts' => Cache::remember(
                 key: 'user.' . $request->user()->id . '.asset_accounts',
                 ttl: 300,
@@ -59,7 +60,10 @@ class HandleInertiaRequests extends Middleware
                     $session = $request
                         ->user()
                         ->gameLobbies()
-                        ->whereNot('status', GameLobbyStatus::Ended)
+                        ->whereIn('status', [
+                            GameLobbyStatus::InGame,
+                            GameLobbyStatus::InLobby,
+                        ])
                         ->first();
 
                     return $session
@@ -80,10 +84,15 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'user' => $request->user()
-                ? $this->loadUserData(request: $request)
-                : null,
+            'auth' => function () use ($request) {
+                return [
+                    'user' => $request->user()
+                        ? $this->loadUserData(request: $request)
+                        : null,
+                ];
+            },
             'config' => [
+                'dashboard_art' => asset('images/dashboard-art.png'),
                 'main_pattern' => asset('images/main-pattern.png'),
                 'game_lobby_pattern' => asset('images/game-lobby-pattern.png'),
                 'game_lobby_loading_gif' => asset(

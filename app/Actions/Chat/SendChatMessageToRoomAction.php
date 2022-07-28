@@ -2,7 +2,7 @@
 
 namespace App\Actions\Chat;
 
-use App\Events\ChatRoom\ChatRoomMessageEvent;
+use App\Events\GameLobby\ChatRoomMessageEvent;
 use App\Models\ChatRoom;
 use App\Models\ChatRoomMessage;
 use Illuminate\Http\Request;

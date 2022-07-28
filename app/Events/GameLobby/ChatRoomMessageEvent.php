@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Events\ChatRoom;
+namespace App\Events\GameLobby;
 
+use App\Enums\ChatRoomType;
 use App\Models\ChatRoom;
 use App\Models\ChatRoomMessage;
 use App\Models\User;
@@ -23,8 +24,14 @@ class ChatRoomMessageEvent implements ShouldBroadcast
     ) {
     }
 
-    public function broadcastOn(): Channel
+    public function broadcastOn(): PresenceChannel|array
     {
+        if ($this->chatRoom->type === ChatRoomType::GameLobby) {
+            return [
+                new PresenceChannel('chat-rooms.' . $this->chatRoom->id),
+                new PresenceChannel('game-lobby.' . $this->chatRoom->id),
+            ];
+        }
         return new PresenceChannel('chat-rooms.' . $this->chatRoom->id);
     }
 
@@ -42,7 +49,7 @@ class ChatRoomMessageEvent implements ShouldBroadcast
                 'last_name' => $this->sender->last_name,
                 'full_name' => $this->sender->full_name,
                 'username' => $this->sender->username,
-                'image' => $this->sender->image,
+                'image_url' => $this->sender->image_url,
             ],
             'message' => [
                 'message' => $this->chatRoomMessage->message,

@@ -1,6 +1,7 @@
 <?php
 
 use App\Broadcasting\ChatRoomChannel;
+use App\Broadcasting\GameLobbyChannel;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -18,3 +19,4 @@ Broadcast::channel('user.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 Broadcast::channel('chat-rooms.{chatRoom}', ChatRoomChannel::class);
+Broadcast::channel('game-lobby.{gameLobby}', GameLobbyChannel::class);

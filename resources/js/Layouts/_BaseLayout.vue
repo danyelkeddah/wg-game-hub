@@ -1,18 +1,18 @@
 <script setup>
 import { onBeforeUnmount, onMounted, defineProps } from 'vue';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let props = defineProps({
-    user: Object,
-});
+let currentUser = useCurrentUser();
+
 onMounted(() => {
-    if (props.user) {
-        window.echo.private(`user.${props.user.id}`);
+    if (currentUser) {
+        window.echo.private(`user.${currentUser.id}`);
     }
 });
 
 onBeforeUnmount(() => {
-    if (props.user) {
-        window.echo.leave(`user.${props.user.id}`);
+    if (currentUser) {
+        window.echo.leave(`user.${currentUser.id}`);
     }
 });
 </script>

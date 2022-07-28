@@ -26,7 +26,7 @@ class ChatRoomChannel
                 'last_name' => $user->last_name,
                 'full_name' => $user->full_name,
                 'username' => $user->username,
-                'image' => $user->image,
+                'image_url' => $user->image_url,
             ];
         }
 

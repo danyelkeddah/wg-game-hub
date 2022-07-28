@@ -12,7 +12,7 @@ import { isEmpty } from 'lodash';
 import { Inertia } from '@inertiajs/inertia';
 
 let props = defineProps({
-    dashboard_art: String,
+    config: Object,
     games: Object,
     balance: Array,
     user: Object,
@@ -30,7 +30,6 @@ function playGameModalStartButtonClicked() {
     if (isEmpty(playGameModalSelectedGame)) {
         return;
     }
-    console.log('starting..', playGameModalSelectedGame.name);
     playGameModalIsOpen.value = false;
     Inertia.visit('/games/1');
 }
@@ -49,7 +48,10 @@ function gameActionButtonClicked(game) {
                 class="mb-8 flex flex-col space-y-6 border-wgh-red-3 bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0"
             >
                 <div class="w-full md:w-1/2">
-                    <img :src="props.dashboard_art" alt="Dashboard Art" />
+                    <img
+                        :src="props.config.dashboard_art"
+                        alt="Dashboard Art"
+                    />
                 </div>
                 <div class="flex w-full flex-col justify-center md:w-1/2">
                     <h2 class="font-grota text-2xl font-extrabold text-white">

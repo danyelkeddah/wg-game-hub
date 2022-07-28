@@ -3,6 +3,7 @@
 namespace App\Console\DevCommands;
 
 use App\Enums\UserAssetAccountStatus;
+use App\Models\Achievement;
 use App\Models\Asset;
 use App\Models\UserAssetAccount;
 use App\Models\ChatRoom;
@@ -10,6 +11,7 @@ use App\Models\Game;
 use App\Models\GameLobby;
 use App\Models\User;
 use App\Models\WodoAssetAccount;
+use Database\Factories\AchievementFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -40,6 +42,7 @@ class WodoGamehubDemoSeedCommand extends Command
         $this->info('Creating Games and Game lobbyes');
         Game::factory()
             ->count(20)
+            ->has(Achievement::factory()->count(8), 'achievements')
             ->has(
                 GameLobby::factory()
                     ->count(10)

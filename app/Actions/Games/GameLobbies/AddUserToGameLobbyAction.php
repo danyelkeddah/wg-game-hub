@@ -3,13 +3,12 @@
 namespace App\Actions\Games\GameLobbies;
 
 use App\Enums\Reactions\AddUserToGameLobbyReaction;
-use App\Events\ChatRoom\UserJoinedGameLobbyEvent;
+use App\Events\GameLobby\UserJoinedGameLobbyEvent;
 use App\Models\ChatRoomUser;
 use App\Models\GameLobby;
 use App\Models\User;
 use App\Models\WodoAssetAccount;
 use DB;
-use Event;
 
 class AddUserToGameLobbyAction
 {

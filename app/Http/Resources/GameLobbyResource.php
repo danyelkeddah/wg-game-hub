@@ -18,6 +18,7 @@ class GameLobbyResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => $this->image,
+            'image_url' => $this->image_url,
             'theme_color' => $this->theme_color,
             'type' => $this->type,
             'status' => $this->status,
@@ -33,12 +34,16 @@ class GameLobbyResource extends JsonResource
             'players_in_lobby_count' => $this->whenNotNull(
                 $this->players_in_lobby_count,
             ),
+            'scheduled_at_utc_string' => $this->scheduled_at_utc_string,
             'users_count' => $this->whenNotNull($this->users_count),
             'game_id' => $this->game_id,
             'asset_id' => $this->asset_id,
             'asset' => new AssetResource($this->whenLoaded('asset')),
             'game' => new GameResource($this->whenLoaded('game')),
             'users' => UserResource::collection($this->whenLoaded('users')),
+            'scores' => UserScoreResource::collection(
+                $this->whenLoaded('scores'),
+            ),
         ];
     }
 }

@@ -42,12 +42,14 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::registerView(function () {
             return Inertia::render('Auth/Login', [
                 'login_art' => asset('images/login-art.jpeg'),
+                'is_login' => false,
             ]);
         });
 
         Fortify::loginView(function () {
             return Inertia::render('Auth/Login', [
                 'login_art' => asset('images/login-art.jpeg'),
+                'is_login' => true,
             ]);
         });
 

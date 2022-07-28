@@ -5,6 +5,7 @@ use App\Http\Controllers\API\{
     Games\GameLobbiesController,
     Games\GameLobbyJoinController,
     Games\GameLobbyLeaveController,
+    Games\GameLobbyResultsController,
     Games\GamesController,
 };
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,12 @@ Route::post(
     'game-lobbies/{gameLobby}/leave',
     GameLobbyLeaveController::class,
 )->name('games.game-lobbies.leave');
+
+// Should be protected only by internal
+Route::post(
+    'game-lobbies/{gameLobby}/results',
+    GameLobbyResultsController::class,
+);
 
 // Chatroom message
 Route::post(

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\ChatRoom;
+namespace App\Events\GameLobby;
 
 use App\Models\GameLobby;
 use App\Models\User;
@@ -21,7 +21,7 @@ class UserJoinedGameLobbyEvent implements ShouldBroadcast
 
     public function broadcastOn(): Channel
     {
-        return new PresenceChannel('chat-rooms.' . $this->gameLobby->id);
+        return new PresenceChannel('game-lobby.' . $this->gameLobby->id);
     }
 
     public function broadcastAs(): string
@@ -38,7 +38,7 @@ class UserJoinedGameLobbyEvent implements ShouldBroadcast
                 'last_name' => $this->user->last_name,
                 'full_name' => $this->user->full_name,
                 'username' => $this->user->username,
-                'image' => $this->user->image,
+                'image_url' => $this->user->image_url,
             ],
         ];
     }
