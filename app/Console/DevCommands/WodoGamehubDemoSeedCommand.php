@@ -26,6 +26,7 @@ use Database\Seeders\DemoGamesSeeder;
 use Database\Seeders\DemoUserAssetAccountsSeeder;
 use Database\Seeders\DemoUsersSeeder;
 use Database\Seeders\DemoWodoAssetAccountsSeeder;
+use Database\Seeders\GeneralChatRoomSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Collection;
@@ -40,6 +41,7 @@ class WodoGamehubDemoSeedCommand extends Command
     public function handle()
     {
         $this->call('migrate:fresh');
+        $this->call(GeneralChatRoomSeeder::class);
         $this->call(DemoUsersSeeder::class);
         $this->call(DemoAssetsSeeder::class);
         $this->call(DemoGamesSeeder::class);

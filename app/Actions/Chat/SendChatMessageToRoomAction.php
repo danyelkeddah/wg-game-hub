@@ -2,7 +2,9 @@
 
 namespace App\Actions\Chat;
 
+use App\Enums\ChatRoomType;
 use App\Events\GameLobby\ChatRoomMessageEvent;
+use App\Events\MessageSentToMainChatRoomEvent;
 use App\Models\ChatRoom;
 use App\Models\ChatRoomMessage;
 use Illuminate\Http\Request;
@@ -20,12 +22,10 @@ class SendChatMessageToRoomAction
             ]),
         );
 
-        broadcast(
-            new ChatRoomMessageEvent(
-                chatRoom: $chatRoom,
-                sender: $user,
-                chatRoomMessage: $message,
-            ),
-        );
+        if ($chatRoom->type === ChatRoomType::Main) {
+            broadcast(new MessageSentToMainChatRoomEvent(sender: $user, chatRoomMessage: $message));
+        } else {
+            broadcast(new ChatRoomMessageEvent(chatRoom: $chatRoom, sender: $user, chatRoomMessage: $message));
+        }
     }
 }

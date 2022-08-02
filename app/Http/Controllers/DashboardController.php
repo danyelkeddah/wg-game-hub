@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Enums\GameStatus;
+use App\Enums\UserAssetAccountStatus;
+use App\Http\Resources\ChatRoomResource;
 use App\Http\Resources\GameResource;
+use App\Models\ChatRoom;
 use App\Models\Game;
 use Inertia\Inertia;
 
@@ -18,6 +21,7 @@ class DashboardController extends Controller
 
         return Inertia::render('Index', [
             'games' => GameResource::collection($games),
+            'mainChatRoom' => ChatRoomResource::make(ChatRoom::mainChannel()->first()),
         ]);
     }
 }

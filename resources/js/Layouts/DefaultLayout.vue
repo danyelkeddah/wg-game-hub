@@ -13,10 +13,6 @@ import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, external: false }];
-const userNavigation = [
-    { name: 'Your Profile', href: route('user.profile', { user: useCurrentUser().username }), external: false },
-    { name: 'Sign out', href: '#' },
-];
 let currentUser = useCurrentUser();
 
 let props = defineProps({
@@ -175,13 +171,16 @@ let props = defineProps({
                                                     <BellIcon class="h-6 w-6" aria-hidden="true" />
                                                 </button>
                                             </div>
-                                            <div class="mt-3 space-y-1 px-2">
+                                            <div class="mt-3 space-y-1 px-2" v-if="useCurrentUser()">
                                                 <a
-                                                    v-for="item in userNavigation"
-                                                    :key="item.name"
-                                                    :href="item.href"
+                                                    :href="route('user.profile', { user: useCurrentUser().username })"
                                                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
-                                                    >{{ item.name }}</a
+                                                    >Your Profile</a
+                                                >
+                                                <a
+                                                    href="#"
+                                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
+                                                    >Sign out</a
                                                 >
                                             </div>
                                         </div>

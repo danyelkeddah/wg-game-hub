@@ -56,7 +56,7 @@ function timePlayedSecondsToHours(s) {
                         </BorderedContainer>
                         <div class="flex flex-col space-y-2">
                             <div class="flex flex-row items-start justify-between">
-                                <h1 class="font-grota text-lg font-extrabold capitalize text-wgh-gray-6">
+                                <h1 class="font-grota text-base font-extrabold capitalize text-wgh-gray-6 md:text-lg">
                                     {{ currentUser.full_name }}
                                 </h1>
                                 <Link class="space-x-2 font-inter text-xs font-normal text-wgh-gray-4 md:hidden">
@@ -75,40 +75,50 @@ function timePlayedSecondsToHours(s) {
                             ><span>settings</span>
                             <SettingsIcon class="h-4 w-4" />
                         </Link>
-                        <div class="flex flex-row lg:space-x-8">
-                            <div class="flex flex-row space-x-2">
+                        <div class="flex flex-row justify-between md:space-x-8">
+                            <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                                 <div class="rounded-full bg-wgh-pink-1 p-3">
                                     <MedalIcon class="h-7 w-7 text-wgh-purple-2" />
                                 </div>
                                 <div class="flex flex-col justify-center">
-                                    <span class="font-inter text-[10px] font-semibold uppercase text-wgh-gray-2"
+                                    <span
+                                        class="text-center font-inter text-[10px] font-semibold uppercase text-wgh-gray-2 lg:text-left"
                                         >won</span
                                     >
-                                    <span class="font-grota text-sm font-normal uppercase text-wgh-gray-6">37 USD</span>
+                                    <span
+                                        class="text-center font-grota text-sm font-normal uppercase text-wgh-gray-6 lg:text-left"
+                                        >37 USD</span
+                                    >
                                 </div>
                             </div>
-                            <div class="flex flex-row space-x-2">
+                            <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                                 <div class="rounded-full bg-wgh-pink-1 p-3">
                                     <RocketIcon class="h-7 w-7 text-wgh-purple-2" />
                                 </div>
                                 <div class="flex flex-col justify-center">
-                                    <span class="font-inter text-[10px] font-semibold uppercase text-wgh-gray-2"
+                                    <span
+                                        class="text-center font-inter text-[10px] font-semibold uppercase text-wgh-gray-2 lg:text-left"
                                         >payed</span
                                     >
-                                    <span class="font-grota text-sm font-normal uppercase text-wgh-gray-6"
+                                    <span
+                                        class="text-center font-grota text-sm font-normal uppercase text-wgh-gray-6 lg:text-left"
                                         >18 times</span
                                     >
                                 </div>
                             </div>
-                            <div class="flex flex-row space-x-2">
+                            <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                                 <div class="rounded-full bg-wgh-pink-1 p-3">
                                     <WatchIcon class="h-7 w-7 text-wgh-purple-2" />
                                 </div>
                                 <div class="flex flex-col justify-center">
-                                    <span class="font-inter text-[10px] font-semibold uppercase text-wgh-gray-2"
+                                    <span
+                                        class="text-center font-inter text-[10px] font-semibold uppercase text-wgh-gray-2 lg:text-left"
                                         >spent</span
                                     >
-                                    <span class="font-grota text-sm font-normal uppercase text-wgh-gray-6">15H</span>
+                                    <span
+                                        class="text-center font-grota text-sm font-normal uppercase text-wgh-gray-6 lg:text-left"
+                                        >15H</span
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -214,11 +224,11 @@ function timePlayedSecondsToHours(s) {
             </BorderedContainer>
         </section>
         <section class="overflow-x-scroll">
-            <div class="mb-6 flex flex-row flex-wrap items-center justify-between">
-                <h2 class="font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
+            <div class="mb-6 flex flex-row items-center justify-between">
+                <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Games Played History
                 </h2>
-                <Link :href="route('user.achievements', { user: currentUser.username })">
+                <Link class="shrink-0" :href="route('user.achievements', { user: currentUser.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>
@@ -284,9 +294,11 @@ function timePlayedSecondsToHours(s) {
             </BorderedContainer>
         </section>
         <section class="overflow-x-scroll">
-            <div class="mb-6 flex flex-row flex-wrap items-center justify-between">
-                <h2 class="font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Latest Achievements</h2>
-                <Link :href="`/w/${currentUser.username}/achievements`">
+            <div class="mb-6 flex flex-row items-center justify-between">
+                <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
+                    Latest Achievements
+                </h2>
+                <Link class="shrink-0" :href="`/w/${currentUser.username}/achievements`">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>

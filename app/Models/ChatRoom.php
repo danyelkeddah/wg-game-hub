@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\ChatRoomBuilder;
 use App\Enums\ChatRoomType;
 use App\Models\Concerns\HasUUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,9 +15,16 @@ class ChatRoom extends Model
     use HasUUID;
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $casts = [
         'type' => ChatRoomType::class,
     ];
+
+    public function newEloquentBuilder($query): ChatRoomBuilder
+    {
+        return new ChatRoomBuilder($query);
+    }
 
     public function users(): BelongsToMany
     {

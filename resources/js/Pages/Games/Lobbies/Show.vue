@@ -2,7 +2,7 @@
 import BorderedContainer from '@/Shared/BorderedContainer';
 import KiteArrow from '@/Shared/SVG/KiteArrow';
 import ChatMessage from '@/Shared/Chat/ChatMessage';
-import { onBeforeUnmount, onMounted, defineProps, reactive, ref } from 'vue';
+import { onBeforeUnmount, onMounted, defineProps, reactive, ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
 import LeaderBoardModal from '@/Shared/Modals/LeaderBoardModal';
@@ -49,6 +49,16 @@ onBeforeUnmount(() => {
     }
 });
 
+watch(
+    chatMessages,
+    () => {
+        chatBox.value.scrollTop = chatBox.value.scrollHeight;
+    },
+    {
+        flush: 'post',
+    }
+);
+
 function channelError(error) {
     console.error('channel error: ', error);
 }
@@ -71,7 +81,6 @@ function sendChatMessage() {
 
 function channelNewChatMessage(message) {
     chatMessages.push(message);
-    chatBox.value.scrollTop = chatBox.value.scrollHeight;
 }
 
 function channelUserJoined(payload) {

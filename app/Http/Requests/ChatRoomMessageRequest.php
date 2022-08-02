@@ -4,18 +4,17 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GameLobbyChatMessageRequest extends FormRequest
+class ChatRoomMessageRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'message' => ['required', 'max:4'],
+            'message' => ['required', 'max:1000'],
         ];
     }
 
     public function authorize(): bool
     {
-        //TODO: Authorize if the user already joined the lobby
         return true;
     }
 }
