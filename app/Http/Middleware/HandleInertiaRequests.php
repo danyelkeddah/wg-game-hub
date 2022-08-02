@@ -7,6 +7,7 @@ use App\Enums\UserAssetAccountStatus;
 use Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Route;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -35,6 +36,7 @@ class HandleInertiaRequests extends Middleware
         return [
             'id' => $request->user()->id,
             'name' => $request->user()->name,
+            'username' => $request->user()->username,
             'last_name' => $request->user()->last_name,
             'full_name' => $request->user()->full_name,
             'email' => $request->user()->email,
@@ -61,14 +63,13 @@ class HandleInertiaRequests extends Middleware
                         ->user()
                         ->gameLobbies()
                         ->whereIn('status', [
+                            GameLobbyStatus::Scheduled,
                             GameLobbyStatus::InGame,
                             GameLobbyStatus::InLobby,
                         ])
                         ->first();
 
-                    return $session
-                        ? $session->only('id', 'game_id', 'name')
-                        : null;
+                    return $session ? $session->only('id', 'game_id', 'name') : null;
                 },
             ),
         ];
@@ -84,25 +85,22 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
+            'current_url' => url()->current(),
             'auth' => function () use ($request) {
                 return [
-                    'user' => $request->user()
-                        ? $this->loadUserData(request: $request)
-                        : null,
+                    'user' => $request->user() ? $this->loadUserData(request: $request) : null,
                 ];
             },
             'config' => [
                 'dashboard_art' => asset('images/dashboard-art.png'),
                 'main_pattern' => asset('images/main-pattern.png'),
                 'game_lobby_pattern' => asset('images/game-lobby-pattern.png'),
-                'game_lobby_loading_gif' => asset(
-                    'images/game-lobby-loading.gif',
-                ),
+                'game_lobby_loading_gif' => asset('images/game-lobby-loading.gif'),
             ],
             'flash' => function () use ($request) {
                 return [
-                    'error' => $request->session()->get('error'),
-                    'success' => $request->session()->get('success'),
+                    'error' => session()->get('error'),
+                    'success' => session()->get('success'),
                 ];
             },
         ]);

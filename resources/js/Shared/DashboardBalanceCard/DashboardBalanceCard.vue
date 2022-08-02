@@ -9,21 +9,23 @@ let props = defineProps({
 });
 </script>
 <template>
-    <BorderedContainer class="border-wgh-gray-1.5 bg-white p-6">
-        <div class="mb-4 flex flex-col space-y-4">
-            <DashboardBalanceCardCoin
-                v-for="account in props.asset_accounts"
-                :account="account"
-            />
-        </div>
-        <div>
-            <button class="w-full outline-none">
-                <ButtonShape type="gray">
-                    <span class="w-full text-center font-bold uppercase"
-                        >Top UP</span
-                    >
-                </ButtonShape>
-            </button>
+    <BorderedContainer class="bg-wgh-gray-1.5">
+        <div class="rounded-lg bg-white p-6">
+            <div class="mb-4 flex flex-col space-y-4">
+                <DashboardBalanceCardCoin
+                    v-for="account in props.asset_accounts"
+                    :account="account"
+                />
+            </div>
+            <div>
+                <button class="w-full outline-none">
+                    <ButtonShape type="gray">
+                        <span class="w-full text-center font-bold uppercase"
+                            >Top UP</span
+                        >
+                    </ButtonShape>
+                </button>
+            </div>
         </div>
     </BorderedContainer>
 </template>

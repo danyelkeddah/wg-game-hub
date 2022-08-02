@@ -127,3 +127,11 @@ html, body {
     src: url(/fonts/Inter/Inter-ExtraBold.woff) format('woff');
     font-weight: 900;
 }
+
+.container-snap::-webkit-scrollbar {
+    display: none;
+}
+.container-snap {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}

@@ -65,7 +65,7 @@ class GameLobby extends Model
     {
         return new Attribute(
             get: function () {
-                return $this->scheduled_at->toString();
+                return $this->scheduled_at?->toString();
             },
         );
     }
@@ -111,7 +111,7 @@ class GameLobby extends Model
         return $this->hasMany(UserScore::class);
     }
 
-    public function gameMatchAchievements(): HasMany
+    public function usersAchievements(): HasMany
     {
         return $this->hasMany(UserAchievement::class);
     }

@@ -14,9 +14,9 @@ class DashboardController extends Controller
         $games = Game::where('status', GameStatus::Online)
             ->select(['id', 'name', 'description', 'image'])
             ->withCount('gameLobbies')
-            ->paginate();
+            ->paginate(pageName: 'games');
 
-        return Inertia::render('Dashboard', [
+        return Inertia::render('Index', [
             'games' => GameResource::collection($games),
         ]);
     }

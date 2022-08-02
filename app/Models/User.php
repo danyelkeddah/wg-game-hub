@@ -76,7 +76,7 @@ class User extends Authenticatable
         );
     }
 
-    public function gameMatchScores(): HasMany
+    public function gamesScores(): HasMany
     {
         return $this->hasMany(UserScore::class);
     }

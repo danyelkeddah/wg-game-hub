@@ -23,9 +23,7 @@ class StoreAchievementsFromGameMatchResultAction
             ),
         );
 
-        $gameLobby
-            ->gameMatchAchievements()
-            ->saveMany($gameMatchAchievementsModels);
+        $gameLobby->usersAchievements()->saveMany($gameMatchAchievementsModels);
     }
 
     protected function attributes(

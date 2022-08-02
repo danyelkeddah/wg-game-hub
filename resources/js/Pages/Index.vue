@@ -10,12 +10,13 @@ import BorderedContainer from '@/Shared/BorderedContainer';
 import { ref, reactive } from 'vue';
 import { isEmpty } from 'lodash';
 import { Inertia } from '@inertiajs/inertia';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
+let currentUser = useCurrentUser();
 let props = defineProps({
     config: Object,
     games: Object,
     balance: Array,
-    user: Object,
 });
 
 let playGameModalIsOpen = ref(false);
@@ -44,23 +45,30 @@ function gameActionButtonClicked(game) {
     <div class="flex h-full flex-col lg:flex-row lg:space-x-6">
         <div class="w-full lg:w-3/4">
             <ActiveSessionBanner />
-            <BorderedContainer
-                class="mb-8 flex flex-col space-y-6 border-wgh-red-3 bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0"
-            >
-                <div class="w-full md:w-1/2">
-                    <img
-                        :src="props.config.dashboard_art"
-                        alt="Dashboard Art"
-                    />
-                </div>
-                <div class="flex w-full flex-col justify-center md:w-1/2">
-                    <h2 class="font-grota text-2xl font-extrabold text-white">
-                        The First Retro Gaming Playground Competitions!
-                    </h2>
-                    <p class="mt-4 font-inter text-base font-normal text-white">
-                        A small description about the first section explaining
-                        about the platform.
-                    </p>
+
+            <BorderedContainer class="mb-8 bg-wgh-red-3">
+                <div
+                    class="flex flex-col space-y-6 rounded-lg bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0"
+                >
+                    <div class="w-full md:w-1/2">
+                        <img
+                            :src="props.config.dashboard_art"
+                            alt="Dashboard Art"
+                        />
+                    </div>
+                    <div class="flex w-full flex-col justify-center md:w-1/2">
+                        <h2
+                            class="font-grota text-2xl font-extrabold text-white"
+                        >
+                            The First Retro Gaming Playground Competitions!
+                        </h2>
+                        <p
+                            class="mt-4 font-inter text-base font-normal text-white"
+                        >
+                            A small description about the first section
+                            explaining about the platform.
+                        </p>
+                    </div>
                 </div>
             </BorderedContainer>
             <h1 class="mb-6 font-grota text-2xl font-extrabold text-wgh-gray-6">
@@ -101,11 +109,11 @@ function gameActionButtonClicked(game) {
         </div>
         <div class="h-full w-full space-y-6 lg:w-1/4">
             <DashboardBalanceCard
-                v-if="user"
+                v-if="currentUser"
                 :balance="balance"
-                :asset_accounts="user.asset_accounts"
+                :asset_accounts="currentUser.asset_accounts"
             />
-            <DashboardBalanceCardCreateAccount v-if="!user" />
+            <DashboardBalanceCardCreateAccount v-if="!currentUser" />
         </div>
     </div>
 </template>

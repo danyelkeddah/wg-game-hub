@@ -40,7 +40,7 @@ class Game extends Model
 
     public function achievements(): HasMany
     {
-        return $this->hasMany(Achievement::class);
+        return $this->hasMany(Achievement::class, 'game_id');
     }
 
     public function imageUrl(): Attribute

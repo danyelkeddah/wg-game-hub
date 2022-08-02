@@ -12,6 +12,10 @@ module.exports = {
                 inter: ['Inter', ...defaultTheme.fontFamily.sans],
                 grota: ['Grota', ...defaultTheme.fontFamily.sans],
             },
+            padding: {
+                '3px': '3px',
+                '9px': '9px',
+            },
             colors: {
                 'wgh-red-1': '#FF5233',
                 'wgh-red-2': '#FF3815',
@@ -39,6 +43,7 @@ module.exports = {
                 'wgh-yellow-2': '#FBDD11',
                 'wgh-yellow-3': '#FFA722',
             },
+
             borderWidth: {
                 3: '3px',
                 6: '6px',

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\GameLobbyStatus;
 use App\Enums\GameLobbyType;
+use App\Models\Asset;
 use App\Models\Game;
 use App\Models\GameLobby;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -16,7 +17,7 @@ class GameLobbyFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->sentence(),
             'description' => $this->faker->text(),
             'image' => $this->faker->imageUrl(337, 110),
             'theme_color' => $this->faker->safeHexColor(),
@@ -32,5 +33,15 @@ class GameLobbyFactory extends Factory
             'available_spots' => $mp,
             'scheduled_at' => now()->addHours(rand(5, 200)),
         ];
+    }
+
+    public function scheduledInPast()
+    {
+        return $this->state(function (array $attributes) {
+            $d = rand(5, 100);
+            return [
+                'scheduled_at' => now()->subDays($d),
+            ];
+        });
     }
 }
