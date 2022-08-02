@@ -30,12 +30,7 @@ class GameLobby extends Model
 
     protected $dates = ['scheduled_at'];
 
-    protected $appends = [
-        'has_available_spots',
-        'players_in_lobby_count',
-        'scheduled_at_utc_string',
-        'image_url',
-    ];
+    protected $appends = ['has_available_spots', 'players_in_lobby_count', 'scheduled_at_utc_string', 'image_url'];
 
     public function imageUrl(): Attribute
     {
@@ -55,8 +50,7 @@ class GameLobby extends Model
     {
         return new Attribute(
             get: function () {
-                return $this->available_spots > 0 &&
-                    $this->available_spots <= $this->max_players;
+                return $this->available_spots > 0 && $this->available_spots <= $this->max_players;
             },
         );
     }
@@ -86,7 +80,9 @@ class GameLobby extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class)->using(GameLobbyUser::class);
+        return $this->belongsToMany(User::class)
+            ->using(GameLobbyUser::class)
+            ->withPivot(['entrance_fee', 'joined_at']);
     }
 
     public function chatRoom(): HasOne

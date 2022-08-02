@@ -3,9 +3,11 @@
 namespace App\Actions\Games\GameLobbies;
 
 use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
+use App\Events\GameLobby\PrizeUpdatedEvent;
 use App\Events\GameLobby\UserLeftGameLobbyEvent;
 use App\Models\ChatRoomUser;
 use App\Models\GameLobby;
+use App\Models\GameLobbyUser;
 use App\Models\WodoAssetAccount;
 use Auth;
 use Cache;
@@ -15,10 +17,8 @@ use Illuminate\Http\Request;
 
 class RemoveUserFromGameLobbyAction
 {
-    public function execute(
-        Request $request,
-        GameLobby $gameLobby,
-    ): GameLobby|RemoveUserFromGameLobbyReaction {
+    public function execute(Request $request, GameLobby $gameLobby): GameLobby|RemoveUserFromGameLobbyReaction
+    {
         $user = $request->user();
         return DB::transaction(
             callback: function () use ($user, $gameLobby) {
@@ -50,10 +50,7 @@ class RemoveUserFromGameLobbyAction
                 $gameLobbyUserEntranceFee = $gameLobbyUser->pivot->entrance_fee;
 
                 // return the amount he paid
-                $userAssetAccount->increment(
-                    'balance',
-                    $gameLobbyUserEntranceFee,
-                );
+                $userAssetAccount->increment('balance', $gameLobbyUserEntranceFee);
 
                 $wodoAccount = WodoAssetAccount::sharedLock()
                     ->where('asset_id', $gameLobby->asset_id)
@@ -65,19 +62,19 @@ class RemoveUserFromGameLobbyAction
 
                 $gameLobby->users()->detach([$user->id]);
 
-                ChatRoomUser::where([
-                    ['chat_room_id', '=', $gameLobby->id],
-                    ['user_id', '=', $user->id],
-                ])->delete();
+                ChatRoomUser::where([['chat_room_id', '=', $gameLobby->id], ['user_id', '=', $user->id]])->delete();
 
                 Cache::forget('user.' . Auth::id() . '.current-lobby-session');
 
+                Event::dispatch(new UserLeftGameLobbyEvent(gameLobby: $gameLobby, user: $user));
+
                 Event::dispatch(
-                    new UserLeftGameLobbyEvent(
+                    new PrizeUpdatedEvent(
                         gameLobby: $gameLobby,
-                        user: $user,
+                        newPrize: (int) GameLobbyUser::whereBelongsTo($gameLobby)->sum('entrance_fee'),
                     ),
                 );
+
                 return $gameLobby;
             },
         );

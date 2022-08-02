@@ -12,6 +12,7 @@ export default class GameLobby extends Model {
                 processingResults: '.status.processing-results',
                 resultsProcessed: '.status.results-processed',
             },
+            prizeUpdated: '.prize-updated',
         };
     }
 

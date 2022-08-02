@@ -3,19 +3,20 @@
 namespace App\Actions\Games\GameLobbies;
 
 use App\Enums\Reactions\AddUserToGameLobbyReaction;
+use App\Events\GameLobby\PrizeUpdatedEvent;
 use App\Events\GameLobby\UserJoinedGameLobbyEvent;
 use App\Models\ChatRoomUser;
 use App\Models\GameLobby;
+use App\Models\GameLobbyUser;
 use App\Models\User;
 use App\Models\WodoAssetAccount;
 use DB;
+use Event;
 
 class AddUserToGameLobbyAction
 {
-    public function execute(
-        User $user,
-        GameLobby $gameLobby,
-    ): GameLobby|AddUserToGameLobbyReaction {
+    public function execute(User $user, GameLobby $gameLobby): GameLobby|AddUserToGameLobbyReaction
+    {
         return DB::transaction(
             callback: function () use ($user, $gameLobby) {
                 $gameLobby = GameLobby::query()
@@ -41,15 +42,10 @@ class AddUserToGameLobbyAction
                     ->where('asset_id', $gameLobby->asset_id)
                     ->first();
 
-                if (
-                    $userAssetAccount->balance < $gameLobby->base_entrance_fee
-                ) {
+                if ($userAssetAccount->balance < $gameLobby->base_entrance_fee) {
                     return AddUserToGameLobbyReaction::InsufficientFunds;
                 }
-                $userAssetAccount->decrement(
-                    'balance',
-                    $fee = $gameLobby->base_entrance_fee,
-                );
+                $userAssetAccount->decrement('balance', $fee = $gameLobby->base_entrance_fee);
 
                 $gameLobby->users()->syncWithPivotValues(
                     ids: $user->id,
@@ -72,10 +68,12 @@ class AddUserToGameLobbyAction
 
                 $gameLobby->decrement('available_spots');
 
-                broadcast(
-                    new UserJoinedGameLobbyEvent(
+                broadcast(new UserJoinedGameLobbyEvent(gameLobby: $gameLobby, user: $user, entranceFee: $fee));
+
+                Event::dispatch(
+                    new PrizeUpdatedEvent(
                         gameLobby: $gameLobby,
-                        user: $user,
+                        newPrize: (int) GameLobbyUser::whereBelongsTo($gameLobby)->sum('entrance_fee'),
                     ),
                 );
                 return $gameLobby;

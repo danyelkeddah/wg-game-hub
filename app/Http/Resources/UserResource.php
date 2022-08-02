@@ -33,6 +33,9 @@ class UserResource extends JsonResource
             'last_name' => $this->last_name,
             'full_name' => $this->full_name,
             'assets' => AssetResource::collection($this->whenLoaded('assets')),
+            'entrance_fee' => $this->whenPivotLoaded('game_lobby_user', function () {
+                return $this->pivot->entrance_fee;
+            }),
         ];
     }
 }

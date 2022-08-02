@@ -1,10 +1,5 @@
 <script setup>
-import {
-    Dialog,
-    DialogPanel,
-    TransitionChild,
-    TransitionRoot,
-} from '@headlessui/vue';
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { defineProps, reactive } from 'vue';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
@@ -15,10 +10,7 @@ let props = defineProps({
     gameLobby: Object,
 });
 
-let players = _.merge(
-    _.keyBy(props.gameLobby.users, 'id'),
-    _.keyBy(props.gameLobby.scores, 'user_id')
-);
+let players = _.merge(_.keyBy(props.gameLobby.users, 'id'), _.keyBy(props.gameLobby.scores, 'user_id'));
 
 let orderedPlayers = _.flatten(
     _.merge(
@@ -27,7 +19,7 @@ let orderedPlayers = _.flatten(
         })
     )
 );
-let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
+let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id]);
 </script>
 
 <template>
@@ -42,14 +34,10 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                />
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </TransitionChild>
             <div class="fixed inset-0 z-10 overflow-y-auto">
-                <div
-                    class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0"
-                >
+                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                     <TransitionChild
                         as="template"
                         enter="ease-out duration-300"
@@ -259,18 +247,9 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#EDA826" />
-                                                <stop
-                                                    offset="0.33"
-                                                    stop-color="#EFAE2C"
-                                                />
-                                                <stop
-                                                    offset="0.77"
-                                                    stop-color="#F3BF3D"
-                                                />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#F6CB49"
-                                                />
+                                                <stop offset="0.33" stop-color="#EFAE2C" />
+                                                <stop offset="0.77" stop-color="#F3BF3D" />
+                                                <stop offset="1" stop-color="#F6CB49" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint1_linear_1_1330"
@@ -281,18 +260,9 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#EDA826" />
-                                                <stop
-                                                    offset="0.33"
-                                                    stop-color="#EFAE2C"
-                                                />
-                                                <stop
-                                                    offset="0.77"
-                                                    stop-color="#F3BF3D"
-                                                />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#F6CB49"
-                                                />
+                                                <stop offset="0.33" stop-color="#EFAE2C" />
+                                                <stop offset="0.77" stop-color="#F3BF3D" />
+                                                <stop offset="1" stop-color="#F6CB49" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint2_linear_1_1330"
@@ -303,10 +273,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint3_linear_1_1330"
@@ -317,10 +284,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint4_linear_1_1330"
@@ -331,10 +295,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint5_linear_1_1330"
@@ -345,10 +306,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint6_linear_1_1330"
@@ -359,18 +317,9 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#EDA826" />
-                                                <stop
-                                                    offset="0.33"
-                                                    stop-color="#EFAE2C"
-                                                />
-                                                <stop
-                                                    offset="0.77"
-                                                    stop-color="#F3BF3D"
-                                                />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#F6CB49"
-                                                />
+                                                <stop offset="0.33" stop-color="#EFAE2C" />
+                                                <stop offset="0.77" stop-color="#F3BF3D" />
+                                                <stop offset="1" stop-color="#F6CB49" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint7_linear_1_1330"
@@ -381,18 +330,9 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#EDA826" />
-                                                <stop
-                                                    offset="0.33"
-                                                    stop-color="#EFAE2C"
-                                                />
-                                                <stop
-                                                    offset="0.77"
-                                                    stop-color="#F3BF3D"
-                                                />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#F6CB49"
-                                                />
+                                                <stop offset="0.33" stop-color="#EFAE2C" />
+                                                <stop offset="0.77" stop-color="#F3BF3D" />
+                                                <stop offset="1" stop-color="#F6CB49" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint8_linear_1_1330"
@@ -403,10 +343,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint9_linear_1_1330"
@@ -417,10 +354,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint10_linear_1_1330"
@@ -431,10 +365,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint11_linear_1_1330"
@@ -445,18 +376,9 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#EDA826" />
-                                                <stop
-                                                    offset="0.33"
-                                                    stop-color="#EFAE2C"
-                                                />
-                                                <stop
-                                                    offset="0.77"
-                                                    stop-color="#F3BF3D"
-                                                />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#F6CB49"
-                                                />
+                                                <stop offset="0.33" stop-color="#EFAE2C" />
+                                                <stop offset="0.77" stop-color="#F3BF3D" />
+                                                <stop offset="1" stop-color="#F6CB49" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint12_linear_1_1330"
@@ -467,18 +389,9 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#EDA826" />
-                                                <stop
-                                                    offset="0.33"
-                                                    stop-color="#EFAE2C"
-                                                />
-                                                <stop
-                                                    offset="0.77"
-                                                    stop-color="#F3BF3D"
-                                                />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#F6CB49"
-                                                />
+                                                <stop offset="0.33" stop-color="#EFAE2C" />
+                                                <stop offset="0.77" stop-color="#F3BF3D" />
+                                                <stop offset="1" stop-color="#F6CB49" />
                                             </linearGradient>
                                             <linearGradient
                                                 id="paint13_linear_1_1330"
@@ -489,17 +402,10 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 gradientUnits="userSpaceOnUse"
                                             >
                                                 <stop stop-color="#F2BA38" />
-                                                <stop
-                                                    offset="1"
-                                                    stop-color="#EDA826"
-                                                />
+                                                <stop offset="1" stop-color="#EDA826" />
                                             </linearGradient>
                                             <clipPath id="clip0_1_1330">
-                                                <rect
-                                                    width="585"
-                                                    height="273"
-                                                    fill="white"
-                                                />
+                                                <rect width="585" height="273" fill="white" />
                                             </clipPath>
                                         </defs>
                                     </svg>
@@ -529,17 +435,14 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                         </svg>
 
                                         <div class="flex flex-col">
-                                            <div
-                                                class="mx-auto mb-10 flex w-full flex-row items-stretch space-x-4"
-                                            >
+                                            <div class="mx-auto mb-10 flex w-full flex-row items-stretch space-x-4">
                                                 <div
                                                     class="flex flex-1 flex-col items-center"
                                                     v-for="player in orderedPlayers"
                                                 >
-                                                    <span
-                                                        class="mb-2 font-grota text-xs font-bold text-wgh-gray-4"
-                                                        >{{ player.rank }}</span
-                                                    >
+                                                    <span class="mb-2 font-grota text-xs font-bold text-wgh-gray-4">{{
+                                                        player.rank
+                                                    }}</span>
                                                     <img
                                                         :src="player.image_url"
                                                         :alt="player.name"
@@ -547,9 +450,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                     />
                                                     <span
                                                         class="text-center font-grota text-base font-bold text-wgh-gray-6"
-                                                        >{{
-                                                            player.score
-                                                        }}</span
+                                                        >{{ player.score }}</span
                                                     >
                                                     <span
                                                         class="text-center font-inter text-sm font-normal text-wgh-gray-6"
@@ -563,27 +464,16 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['id', currentUser.id]);
                                                 >
                                                     You were so close!
                                                 </p>
-                                                <p
-                                                    class="text-center font-inter text-base font-normal text-wgh-gray-6"
-                                                >
+                                                <p class="text-center font-inter text-base font-normal text-wgh-gray-6">
                                                     You we’re #
-                                                    {{
-                                                        currentUserScoreRecord.rank
-                                                    }}, next time try a bit
-                                                    harder.
+                                                    {{ currentUserScoreRecord.rank }}, next time try a bit harder.
                                                 </p>
                                             </div>
-                                            <div
-                                                class="flex flex-row justify-center space-x-4"
-                                            >
-                                                <ButtonShape
-                                                    type="gray"
-                                                    class="cursor-pointer uppercase"
+                                            <div class="flex flex-row justify-center space-x-4">
+                                                <ButtonShape type="gray" class="cursor-pointer uppercase"
                                                     >Play Again</ButtonShape
                                                 >
-                                                <ButtonShape
-                                                    type="red"
-                                                    class="cursor-pointer uppercase"
+                                                <ButtonShape type="red" class="cursor-pointer uppercase"
                                                     >CONTINUE</ButtonShape
                                                 >
                                             </div>

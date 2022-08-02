@@ -15,7 +15,7 @@ class UserJoinedGameLobbyEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public GameLobby $gameLobby, public User $user)
+    public function __construct(public GameLobby $gameLobby, public User $user, public int $entranceFee)
     {
     }
 
@@ -39,6 +39,7 @@ class UserJoinedGameLobbyEvent implements ShouldBroadcast
                 'full_name' => $this->user->full_name,
                 'username' => $this->user->username,
                 'image_url' => $this->user->image_url,
+                'entrance_fee' => $this->entranceFee,
             ],
         ];
     }
