@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\GameLobbyUser;
 use App\Models\User;
 use App\Models\UserAchievement;
 use App\Models\UserScore;
@@ -14,10 +15,7 @@ class DashboardController extends Controller
     {
         $totalTimePlayed = UserScore::whereBelongsTo($user)->sum('time_played');
 
-        $topThreePlayedGamesAndTotalTimePlayed = UserScore::where(
-            'user_id',
-            $user->id,
-        )
+        $topThreePlayedGamesAndTotalTimePlayed = UserScore::where('user_id', $user->id)
             ->selectRaw('game_id, sum(time_played) as total_time_played')
             ->groupBy('game_id')
             ->orderBy('total_time_played', 'DESC')
@@ -45,6 +43,7 @@ class DashboardController extends Controller
             ->get();
 
         return Inertia::render('User/Dashboard', [
+            'totalPlayed' => GameLobbyUser::whereBelongsTo($user)->count(),
             'totalTimePlayed' => (int) $totalTimePlayed,
             'topPlayedGamesTimeSpent' => $topThreePlayedGamesAndTotalTimePlayed,
             'lastGamePlayed' => $lastLobbyPlayedIn->game,

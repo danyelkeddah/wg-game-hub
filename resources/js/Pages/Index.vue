@@ -111,7 +111,7 @@ watch(
                     />
                     <div
                         id="chat-messages"
-                        class="flex grow flex-col space-y-2 overflow-y-scroll scroll-smooth px-2 pb-2"
+                        class="flex grow flex-col space-y-2 overflow-y-auto scroll-smooth px-2 pb-2"
                         ref="chatBox"
                     >
                         <ChatMessage

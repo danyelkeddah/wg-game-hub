@@ -23,6 +23,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
+    totalPlayed: Number,
     lastGamePlayed: Object,
     latestGamesPlayedHistory: Object,
     latestAchievements: Object,
@@ -35,13 +36,13 @@ function UTCToHumanReadable(u) {
 }
 
 function timePlayedSecondsToHours(s) {
-    return dayjs.duration({ seconds: s }).humanize();
+    return dayjs.duration({ seconds: s }).asHours().toPrecision(2) + 'H';
 }
 </script>
 
 <template>
     <div class="grid grid-flow-row gap-y-8">
-        <section class="overflow-x-scroll">
+        <section class="overflow-x-auto">
             <BorderedContainer class="mb-9 bg-wgh-gray-1.5">
                 <div class="flex flex-col justify-between rounded-lg bg-white p-6 md:flex-row">
                     <div class="flex flex-row items-start space-x-5 lg:items-center">
@@ -102,7 +103,7 @@ function timePlayedSecondsToHours(s) {
                                     >
                                     <span
                                         class="text-center font-grota text-sm font-normal uppercase text-wgh-gray-6 lg:text-left"
-                                        >18 times</span
+                                        >{{ props.totalPlayed }} times</span
                                     >
                                 </div>
                             </div>
@@ -117,7 +118,7 @@ function timePlayedSecondsToHours(s) {
                                     >
                                     <span
                                         class="text-center font-grota text-sm font-normal uppercase text-wgh-gray-6 lg:text-left"
-                                        >15H</span
+                                        >{{ timePlayedSecondsToHours(totalTimePlayed) }}</span
                                     >
                                 </div>
                             </div>
@@ -127,7 +128,7 @@ function timePlayedSecondsToHours(s) {
             </BorderedContainer>
         </section>
 
-        <section class="overflow-x-scroll">
+        <section class="overflow-x-auto">
             <div class="flex flex-col">
                 <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Summary</h2>
                 <div class="flex flex-1 flex-wrap gap-4">
@@ -171,11 +172,7 @@ function timePlayedSecondsToHours(s) {
                                                             <td
                                                                 class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                                             >
-                                                                {{
-                                                                    timePlayedSecondsToHours(
-                                                                        item.total_time_played
-                                                                    ).toLocaleString()
-                                                                }}
+                                                                {{ timePlayedSecondsToHours(item.total_time_played) }}
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -191,7 +188,7 @@ function timePlayedSecondsToHours(s) {
             </div>
         </section>
 
-        <section class="overflow-x-scroll">
+        <section class="overflow-x-auto">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Last Played</h2>
 
             <BorderedContainer class="bg-wgh-gray-1.5">
@@ -223,12 +220,12 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
-        <section class="overflow-x-scroll">
+        <section class="overflow-x-auto">
             <div class="mb-6 flex flex-row items-center justify-between">
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Games Played History
                 </h2>
-                <Link class="shrink-0" :href="route('user.achievements', { user: currentUser.username })">
+                <Link class="shrink-0" :href="route('user.games-played-history', { user: currentUser.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>
@@ -293,12 +290,12 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
-        <section class="overflow-x-scroll">
+        <section class="overflow-x-auto">
             <div class="mb-6 flex flex-row items-center justify-between">
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Achievements
                 </h2>
-                <Link class="shrink-0" :href="`/w/${currentUser.username}/achievements`">
+                <Link class="shrink-0" :href="route('user.achievements', { user: currentUser.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>

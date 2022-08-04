@@ -42,7 +42,7 @@ function startGameButtonClicked(gameOption) {
         return;
     }
     if (settings.isThereActiveLobbySession() && gameOption.id === settings.getActiveGameLobbySession().id) {
-        Inertia.visit(`/game-lobbies/${gameOption.id}`);
+        Inertia.replace(`/game-lobbies/${gameOption.id}`);
         return;
     }
     settings.selectedGameOption = gameOption;
@@ -55,7 +55,7 @@ function modalStartGameButtonClicked() {
         return;
     }
 
-    Inertia.post(`/game-lobbies/${settings.selectedGameOption.id}/join`);
+    Inertia.post(`/game-lobbies/${settings.selectedGameOption.id}/join`, {}, { replace: true });
     // Participate in session
     // and redirect to Lobby
 

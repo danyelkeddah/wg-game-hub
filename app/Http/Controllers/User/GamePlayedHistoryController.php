@@ -4,7 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\UserGamesPlayedHistoryPipeline;
+use App\Http\Resources\GameResource;
 use App\Http\Resources\UserScoreResource;
+use App\Models\Game;
 use App\Models\User;
 use App\Models\UserScore;
 use Illuminate\Http\Request;
@@ -21,11 +23,14 @@ class GamePlayedHistoryController extends Controller
             request: $request,
         );
 
+        $games = Game::get(['id', 'name']);
+
         return Inertia::render('User/GamesPlayedHistory', [
             'userGamesPlayedHistory' => UserScoreResource::collection(
                 $gamePlayedHistory->paginate()->withQueryString(),
             ),
-            'filters' => $request->only('sort_by', 'sort_order'),
+            'games' => GameResource::collection($games),
+            'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);
     }
 }

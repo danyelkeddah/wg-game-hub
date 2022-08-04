@@ -18,16 +18,10 @@ class GameLobbyLeaveController extends Controller
     ) {
         $this->authorize('leave', $gameLobby);
 
-        $reaction = $removeUserFromGameLobbyAction->execute(
-            request: $request,
-            gameLobby: $gameLobby,
-        );
+        $reaction = $removeUserFromGameLobbyAction->execute(request: $request, gameLobby: $gameLobby);
 
         if ($reaction instanceof RemoveUserFromGameLobbyReaction) {
-            return abort(
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-                $reaction->label(),
-            );
+            return abort(Response::HTTP_FORBIDDEN, $reaction->label());
         }
 
         return response()->noContent();

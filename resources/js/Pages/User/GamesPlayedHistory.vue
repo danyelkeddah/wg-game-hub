@@ -18,22 +18,49 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
+    games: Object,
     userGamesPlayedHistory: Object,
     filters: Object,
     current_url: String,
 });
 
 let filters = reactive(props.filters);
-
+let currentUrl = window.location.toString();
+let availableGames = props.games.data;
 let pagination = reactive(new Pagination(props.userGamesPlayedHistory));
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
+
+function byGameFilterChanged() {
+    Inertia.get(currentUrl, { filter_by_game: filters.filter_by_game });
+}
 </script>
 <template>
     <div>
-        <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Games Played History</h2>
+        <div class="flex flex-row justify-between">
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Games Played History</h2>
+
+            <div class="filters">
+                <BorderedContainer class="bg-wgh-gray-1.5">
+                    <div class="rounded-lg">
+                        <select
+                            id="location"
+                            name="location"
+                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                            v-model="filters.filter_by_game"
+                            @change.prevent="byGameFilterChanged"
+                        >
+                            <option :value="undefined">All</option>
+                            <option :key="game.id" v-for="game in availableGames" :value="game.id">
+                                {{ game.name }}
+                            </option>
+                        </select>
+                    </div>
+                </BorderedContainer>
+            </div>
+        </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
             <div class="rounded-lg bg-white px-4 sm:px-0 lg:px-0">
                 <div class="flex flex-col">
@@ -49,7 +76,7 @@ function UTCToHumanReadable(u) {
                                             >
                                                 <Link
                                                     class="group inline-flex"
-                                                    :href="current_url"
+                                                    :href="currentUrl"
                                                     :data="{
                                                         sort_by: 'game_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
@@ -77,7 +104,7 @@ function UTCToHumanReadable(u) {
                                             >
                                                 <Link
                                                     class="group inline-flex"
-                                                    :href="current_url"
+                                                    :href="currentUrl"
                                                     :data="{
                                                         sort_by: 'score',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
@@ -105,7 +132,7 @@ function UTCToHumanReadable(u) {
                                             >
                                                 <Link
                                                     class="group inline-flex"
-                                                    :href="current_url"
+                                                    :href="currentUrl"
                                                     :data="{
                                                         sort_by: 'rank',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
@@ -133,7 +160,7 @@ function UTCToHumanReadable(u) {
                                             >
                                                 <Link
                                                     class="group inline-flex"
-                                                    :href="current_url"
+                                                    :href="currentUrl"
                                                     :data="{
                                                         sort_by: 'played_at',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',

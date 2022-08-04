@@ -177,10 +177,13 @@ let props = defineProps({
                                                     class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                                                     >Your Profile</a
                                                 >
-                                                <a
-                                                    href="#"
-                                                    class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
-                                                    >Sign out</a
+                                                <Link
+                                                    :href="route('logout')"
+                                                    method="post"
+                                                    as="button"
+                                                    replace
+                                                    class="block w-full rounded-md px-3 py-2 text-left text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
+                                                    >Sign out</Link
                                                 >
                                             </div>
                                         </div>

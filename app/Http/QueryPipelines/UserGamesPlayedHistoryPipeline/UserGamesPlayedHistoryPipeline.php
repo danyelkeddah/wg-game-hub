@@ -2,6 +2,7 @@
 
 namespace App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline;
 
+use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\ByGameFilter;
 use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class UserGamesPlayedHistoryPipeline extends Pipeline
 
     protected function pipes()
     {
-        return [new Sort(request: $this->request)];
+        return [new Sort(request: $this->request), new ByGameFilter(request: $this->request)];
     }
 
     public static function make(Builder $builder, Request $request): Builder

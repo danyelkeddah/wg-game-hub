@@ -129,7 +129,7 @@ export default {
             </div>
         </Link>
     </div>
-    <div class="grid min-h-full grow grid-cols-12 gap-8 pt-4">
+    <div class="grid min-h-full grow grid-cols-12 gap-y-8 pt-4 lg:gap-y-0 lg:gap-x-8">
         <div class="col-span-full h-full space-y-10 lg:col-span-9">
             <!--          Content -->
             <div class="mx-auto max-w-4xl rounded-lg bg-white p-2 shadow-2xl">
@@ -172,7 +172,7 @@ export default {
                             />
                         </svg>
                         <div>
-                            <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updated</p>
+                            <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updates</p>
                             <p class="font-inter font-normal uppercase text-wgh-gray-6">{{ latestUpdateMessage }}</p>
                         </div>
                     </div>
@@ -263,8 +263,8 @@ export default {
                 </div>
             </BorderedContainer>
         </div>
-        <div class="col-span-full h-full min-h-[30rem] grow shadow-2xl lg:col-span-3">
-            <BorderedContainer class="h-full bg-wgh-purple-3">
+        <div class="relative col-span-full h-full max-h-full min-h-[30rem] grow shadow-2xl lg:col-span-3">
+            <BorderedContainer class="absolute inset-0 h-full bg-wgh-purple-3">
                 <div class="flex h-full h-full w-full w-full grow flex-col justify-between rounded-lg bg-white p-4">
                     <div
                         id="chat-messages"

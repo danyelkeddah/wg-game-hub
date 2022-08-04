@@ -4,7 +4,9 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\QueryPipelines\UserAchievementsPipeline\UserAchievementsPipeline;
+use App\Http\Resources\GameResource;
 use App\Http\Resources\UserAchievementResource;
+use App\Models\Game;
 use App\Models\User;
 use App\Models\UserAchievement;
 use Illuminate\Http\Request;
@@ -19,9 +21,12 @@ class AchievementsController extends Controller
             request: $request,
         );
 
+        $games = Game::get(['id', 'name']);
+
         return Inertia::render('User/Achievements', [
             'userAchievements' => UserAchievementResource::collection($achievements->paginate()->withQueryString()),
-            'filters' => $request->only('sort_by', 'sort_order'),
+            'games' => GameResource::collection($games),
+            'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);
     }
 }
