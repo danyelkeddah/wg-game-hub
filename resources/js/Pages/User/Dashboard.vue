@@ -188,7 +188,7 @@ function timePlayedSecondsToHours(s) {
             </div>
         </section>
 
-        <section class="overflow-x-auto">
+        <section class="overflow-x-auto" v-if="lastGamePlayed">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Last Played</h2>
 
             <BorderedContainer class="bg-wgh-gray-1.5">

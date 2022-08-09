@@ -26,8 +26,9 @@ class FortifyServiceProvider extends ServiceProvider
         $this->app->instance(
             LogoutResponse::class,
             new class implements LogoutResponse {
-                public function toResponse($request)
-                {
+                public function toResponse(
+                    $request,
+                ): \Illuminate\Routing\Redirector|\Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse {
                     return redirect('/login');
                 }
             },

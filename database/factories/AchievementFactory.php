@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Achievement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
+use Str;
 
 class AchievementFactory extends Factory
 {

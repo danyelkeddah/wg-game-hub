@@ -424,7 +424,12 @@ class DemoGameAchievementsSeeder extends Seeder
                     'name' => 'Reach the gold rank.',
                     'description' => 'Reach the gold rank.',
                 ],
-            ]),
+            ])->merge(
+                Achievement::factory()
+                    ->count(300)
+                    ->make()
+                    ->toArray(),
+            ),
             '2934ceee-e195-4cd0-ae6a-d2098c810917' => collect([
                 [
                     'id' => Str::uuid(),
@@ -826,7 +831,12 @@ class DemoGameAchievementsSeeder extends Seeder
                     'name' => 'Reach the gold rank.',
                     'description' => 'Reach the gold rank.',
                 ],
-            ]),
+            ])->merge(
+                Achievement::factory()
+                    ->count(300)
+                    ->make()
+                    ->toArray(),
+            ),
             '1db03dcf-f131-4a8d-bbe4-c8c8d2d5198b' => collect([
                 [
                     'id' => Str::uuid(),
@@ -1228,7 +1238,12 @@ class DemoGameAchievementsSeeder extends Seeder
                     'name' => 'Voracious Habu',
                     'description' => 'Eat 1m pellets',
                 ],
-            ]),
+            ])->merge(
+                Achievement::factory()
+                    ->count(300)
+                    ->make()
+                    ->toArray(),
+            ),
         ]);
     }
 }

@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserAssetAccount extends Pivot
 {
     use HasUUID;
-    use SoftDeletes;
     use HasFactory;
 
     protected $casts = [
@@ -24,5 +23,10 @@ class UserAssetAccount extends Pivot
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function asset(): BelongsTo
+    {
+        return $this->belongsTo(Asset::class);
     }
 }

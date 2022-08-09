@@ -14,10 +14,7 @@ class GameLobbiesController extends Controller
 {
     public function index(Request $request, Game $game)
     {
-        $gameLobbies = GameLobbyPipeline::make(
-            builder: $game->gameLobbies()->getQuery(),
-            request: $request,
-        )
+        $gameLobbies = GameLobbyPipeline::make(builder: $game->gameLobbies()->getQuery(), request: $request)
             ->with('asset:id,name,symbol')
             ->paginate();
 
@@ -26,10 +23,7 @@ class GameLobbiesController extends Controller
 
     public function show(GameLobby $gameLobby)
     {
-        $gameLobby->load(
-            'game:id,name,description',
-            'users:id,name,image,username',
-        );
+        $gameLobby->load('game:id,name,description', 'users:id,name,image,username');
 
         return new GameLobbyResource(resource: $gameLobby);
     }

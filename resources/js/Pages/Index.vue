@@ -24,6 +24,7 @@ let chatMessageInput = ref('');
 
 let chatBox = ref();
 let currentUser = useCurrentUser();
+
 let props = defineProps({
     mainChatRoom: Object,
     config: Object,

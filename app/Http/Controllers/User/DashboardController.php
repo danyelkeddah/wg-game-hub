@@ -46,7 +46,7 @@ class DashboardController extends Controller
             'totalPlayed' => GameLobbyUser::whereBelongsTo($user)->count(),
             'totalTimePlayed' => (int) $totalTimePlayed,
             'topPlayedGamesTimeSpent' => $topThreePlayedGamesAndTotalTimePlayed,
-            'lastGamePlayed' => $lastLobbyPlayedIn->game,
+            'lastGamePlayed' => $lastLobbyPlayedIn?->game,
             'latestAchievements' => $achievements,
             'latestGamesPlayedHistory' => $gamePlayedHistory,
         ]);

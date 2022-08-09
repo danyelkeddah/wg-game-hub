@@ -13,34 +13,22 @@ use App\Models\GameLobby;
 
 class GameLobbyResultsController extends Controller
 {
-    public function __construct(
-        public StoreGameMatchResultAction $storeGameMatchResultAction,
-    ) {
+    public function __construct(public StoreGameMatchResultAction $storeGameMatchResultAction)
+    {
     }
 
-    public function __invoke(
-        GameMatchResultsPayloadRequest $request,
-        GameLobby $gameLobby,
-    ) {
+    public function __invoke(GameMatchResultsPayloadRequest $request, GameLobby $gameLobby)
+    {
         $gameLobby->status = GameLobbyStatus::ProcessingResults;
         $gameLobby->save();
 
         broadcast(new ProcessingResultsEvent(gameLobby: $gameLobby));
 
-        $gameMatchResultData = GameMatchResultData::fromRequest(
-            request: $request,
-        );
+        $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
 
-        $this->storeGameMatchResultAction->execute(
-            gameLobby: $gameLobby,
-            gameMatchResultData: $gameMatchResultData,
-        );
+        $this->storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
-        broadcast(
-            new ResultsProcessedEvent(
-                gameLobby: $gameLobby->fresh(['users', 'scores']),
-            ),
-        );
+        broadcast(new ResultsProcessedEvent(gameLobby: $gameLobby->fresh(['users', 'scores'])));
 
         return response()->noContent();
     }
