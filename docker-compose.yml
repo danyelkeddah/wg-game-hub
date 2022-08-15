@@ -8,7 +8,7 @@ services:
   nginx:
     build:
       context: ./docker-dev
-      dockerfile: docker-dev/nginx.dockerfile
+      dockerfile: nginx.dockerfile
     container_name: nginx
     depends_on:
       - php
